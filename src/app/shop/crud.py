@@ -1,7 +1,6 @@
-from fastapi import Depends
 from sqlalchemy.orm import Session
 
-from src.shop import models
+from src.app.shop import models
 
 
 def product_list(category_slug: str, db: Session):

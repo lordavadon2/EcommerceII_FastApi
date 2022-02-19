@@ -1,9 +1,8 @@
 from fastapi import APIRouter, Request, Depends
-from fastapi.encoders import jsonable_encoder
 from sqlalchemy.orm import Session
 
-from src.shop import services, models
-from src.utils.depencies import get_db, templates, env
+from src.app.shop import services
+from src.utils.depencies import get_db
 
 router = APIRouter()
 

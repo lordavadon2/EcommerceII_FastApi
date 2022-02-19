@@ -4,7 +4,7 @@ from starlette import status
 from starlette.requests import Request
 
 from src.utils.depencies import templates, env
-from src.shop import crud
+from src.app.shop import crud
 
 
 def get_all_data(request: Request, category_slug: str = '', db: Session = None, page: int = 1):
