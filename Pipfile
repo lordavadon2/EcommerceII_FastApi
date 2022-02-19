@@ -10,6 +10,7 @@ sqlalchemy = "*"
 python-slugify = "*"
 sqlalchemy-utils = "*"
 alembic = "*"
+jinja2 = "*"
 
 [dev-packages]
 
