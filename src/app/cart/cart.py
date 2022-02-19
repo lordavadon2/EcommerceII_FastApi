@@ -17,6 +17,10 @@ class Cart:
 
         self._cart = cart
 
+    @property
+    def cart(self):
+        return self._cart
+
     def add(self, product, quantity=1, update_quantity=False):
         product_id = str(product.id)
         if product_id not in self._cart:
