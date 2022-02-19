@@ -7,6 +7,9 @@ name = "pypi"
 fastapi = "*"
 uvicorn = {extras = ["standard"], version = "*"}
 sqlalchemy = "*"
+python-slugify = "*"
+sqlalchemy-utils = "*"
+alembic = "*"
 
 [dev-packages]
 
