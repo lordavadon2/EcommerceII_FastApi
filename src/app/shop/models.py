@@ -43,3 +43,4 @@ class Product(Base):
 
     category_id = Column(Integer, ForeignKey('category.id'))
     category = relationship('Category', back_populates='products')
+    order_item = relationship('OrderItem', back_populates='product_order')
