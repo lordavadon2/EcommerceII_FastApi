@@ -1,10 +1,12 @@
 from fastapi import HTTPException
 from sqlalchemy.orm import Session
 from starlette import status
+from starlette.background import BackgroundTasks
 from starlette.requests import Request
 from starlette.responses import RedirectResponse
 
 from src.app.cart.cart import Cart
+from src.app.orders.mail import Mail
 from src.utils.depencies import templates, env
 from src.app.orders import crud
 
@@ -26,7 +28,8 @@ def save_order_add(request: Request,
                    address: str,
                    postal_code: int,
                    city: str,
-                   db: Session):
+                   db: Session,
+                   bg_task: BackgroundTasks):
     cart = Cart(request, db)
 
     db_order = crud.create_order(db=db,
@@ -45,5 +48,8 @@ def save_order_add(request: Request,
                                product_id=product_id,
                                item=item)
     cart.remove_all()
+
+    mail = Mail()
+    bg_task.add_task(mail.send_notification)
 
     return RedirectResponse(url='/cart', status_code=status.HTTP_303_SEE_OTHER)
