@@ -8,7 +8,7 @@ from src.utils.depencies import get_db
 router = APIRouter()
 
 
-@router.get('/')
+@router.get('')
 def cart_detail(request: Request, db: Session = Depends(get_db)):
     return services.cart_detail(request, db)
 

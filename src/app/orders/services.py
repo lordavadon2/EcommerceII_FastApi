@@ -7,6 +7,7 @@ from starlette.responses import RedirectResponse
 
 from src.app.cart.cart import Cart
 from src.app.orders.mail import Mail
+from src.app.payment.services import payment_process
 from src.utils.depencies import templates, env
 from src.app.orders import crud
 
@@ -41,6 +42,8 @@ def save_order_add(request: Request,
                                  city=city)
     order_id = db_order.id
 
+    request.session['order_id'] = order_id
+
     for item in cart:
         product_id = item['product']['id']
         crud.create_order_item(db=db,
@@ -52,4 +55,6 @@ def save_order_add(request: Request,
     mail = Mail()
     bg_task.add_task(mail.send_notification)
 
-    return RedirectResponse(url='/cart', status_code=status.HTTP_303_SEE_OTHER)
+    crud.update_order(db=db, order_id=order_id)
+
+    return RedirectResponse(url=f'/payment/checkout/{order_id}', status_code=status.HTTP_303_SEE_OTHER)

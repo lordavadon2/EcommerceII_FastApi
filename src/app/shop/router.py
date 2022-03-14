@@ -7,7 +7,7 @@ from src.utils.depencies import get_db
 router = APIRouter()
 
 
-@router.get('/')
+@router.get('')
 def get_product_list(request: Request,
                              db: Session = Depends(get_db)):
     return services.get_all_data(request=request,

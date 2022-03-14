@@ -34,3 +34,14 @@ def create_order_item(db: Session,
     db.commit()
     db.refresh(db_order_item)
     return db_order_item
+
+
+def update_order(db: Session, order_id: int):
+    db_order = db.query(models.Order).filter_by(id=order_id).first()
+    db_order.is_paid = True
+    db.commit()
+    # db.refresh(db_order)
+
+
+def get_order_items(db: Session, order_id: int):
+    return db.query(models.OrderItem).filter_by(order_id=order_id).all()

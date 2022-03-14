@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <div id="liqpay_checkout"></div>
+    <script>
+        window.LiqPayCheckoutCallback = function () {
+            LiqPayCheckout.init({
+                data: "{{ data }}",
+                signature: "{{ signature }}",
+                embedTo: "#liqpay_checkout",
+                mode: "embed" // embed || popup,
+            }).on("liqpay.callback", function (data) {
+                if (data.status === 'failure') {
+                    const checkout = document.getElementById("liqpay_checkout")
+                    const elem = "<div style='text-align: center;'><a href='http://127.0.0.1:8000/cart/'>Назад к заказу</a></div>"
+                    checkout.insertAdjacentHTML("afterend", elem)
+                } else {
+                    const checkout = document.getElementById("liqpay_checkout")
+                    const elem = "<div style='text-align: center;'><a href='http://127.0.0.1:8000/product'>На главную</a></div>"
+                    checkout.insertAdjacentHTML("afterend", elem)
+                }
+            }).on("liqpay.ready", function (data) {
+                console.log('ready')
+            }).on("liqpay.close", function (data) {
+                console.log("close");
+            });
+        };
+    </script>
+    <script src="//static.liqpay.ua/libjs/checkout.js" async></script>
+{% endblock %}

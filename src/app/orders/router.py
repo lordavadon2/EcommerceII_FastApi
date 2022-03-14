@@ -24,7 +24,7 @@ def order_add(request: Request,
               address: str = Form(...),
               postal_code: int = Form(...),
               city: str = Form(...),
-              db: Session = Depends(get_db), ):
+              db: Session = Depends(get_db)):
     return services.save_order_add(request=request,
                                    first_name=first_name,
                                    last_name=last_name,

@@ -1,6 +1,6 @@
 import datetime
 
-from sqlalchemy import Column, Integer, String, DECIMAL, Boolean, DateTime, ForeignKey, Text
+from sqlalchemy import Column, Integer, String, DECIMAL, Boolean, DateTime, ForeignKey
 from sqlalchemy.orm import relationship
 from sqlalchemy_utils import EmailType
 
@@ -31,7 +31,6 @@ class OrderItem(Base):
 
     id = Column(Integer, autoincrement=True, primary_key=True)
     price = Column(DECIMAL(scale=2))
-    description = Column(Text)
     quantity = Column(Integer, default=1)
 
     product_id = Column(Integer, ForeignKey('product.id'))
