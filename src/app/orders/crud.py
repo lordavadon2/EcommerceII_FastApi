@@ -9,13 +9,19 @@ def create_order(db: Session,
                  email: str,
                  address: str,
                  postal_code: int,
-                 city: str) -> models.Order:
+                 city: str,
+                 coupon_id: int = None,
+                 discount: int = 0,
+                 ) -> models.Order:
     db_order = models.Order(first_name=first_name,
                             last_name=last_name,
                             email=email,
                             address=address,
                             postal_code=postal_code,
-                            city=city)
+                            city=city,
+                            coupon_id=coupon_id,
+                            discount=discount
+                            )
     db.add(db_order)
     db.commit()
     db.refresh(db_order)
@@ -45,3 +51,7 @@ def update_order(db: Session, order_id: int):
 
 def get_order_items(db: Session, order_id: int):
     return db.query(models.OrderItem).filter_by(order_id=order_id).all()
+
+
+def get_order_discount(db: Session, order_id: int):
+    return db.query(models.Order).filter_by(id=order_id).first().discount

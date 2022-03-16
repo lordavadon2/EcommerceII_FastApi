@@ -39,7 +39,9 @@ def save_order_add(request: Request,
                                  email=email,
                                  address=address,
                                  postal_code=postal_code,
-                                 city=city)
+                                 city=city,
+                                 coupon_id=cart.coupon_id,
+                                 discount=cart.get_discount())
     order_id = db_order.id
 
     request.session['order_id'] = order_id

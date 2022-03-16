@@ -2,6 +2,7 @@ from fastapi.encoders import jsonable_encoder
 from sqlalchemy.orm import Session
 from starlette.requests import Request
 
+from src.app.coupon import models
 from src.utils.config import SECRET_KEY
 from src.app.shop.models import Product
 
@@ -16,6 +17,7 @@ class Cart:
             cart = self._session[SECRET_KEY] = {}
 
         self._cart = cart
+        self._coupon_id = self._session.get('coupon_id')
 
     @property
     def cart(self):
@@ -64,3 +66,22 @@ class Cart:
 
     def get_total_price(self):
         return sum(float(item['price']) * float(item['quantity']) for item in self._cart.values())
+
+    @property
+    def coupon(self):
+        if self._coupon_id:
+            return self._db.query(models.Coupon).filter(models.Coupon.id == self._coupon_id).first()
+        return None
+
+    def get_discount(self):
+        if self.coupon:
+            return float("{:.2f}".format((self.coupon.discount / float(100)) * self.get_total_price()))
+
+        return float("{:.2f}".format(0))
+
+    def get_total_price_after_discount(self):
+        return float("{:.2f}".format(self.get_total_price()-self.get_discount()))
+
+    @property
+    def coupon_id(self):
+        return self._coupon_id

@@ -22,6 +22,11 @@ class Order(Base):
 
     order_item = relationship('OrderItem', back_populates='order')
 
+    coupon_id = Column(Integer, ForeignKey('coupons.id'))
+    coupon = relationship('Coupon', back_populates='order')
+
+    discount = Column(DECIMAL)
+
     def get_total_cost(self):
         return sum(item.get_cost() for item in self.items.all())
 

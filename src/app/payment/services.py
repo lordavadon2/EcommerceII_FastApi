@@ -8,10 +8,12 @@ from src.utils.depencies import templates, env
 
 
 def checkout_payment(request: Request, order_id: int, db: Session):
-    total_price = 0
     order_items = crud.get_order_items(db, order_id)
-    for item in order_items:
-        total_price += item.price
+    total_price = sum(item.price for item in order_items)
+    order_discount = crud.get_order_discount(db, order_id)
+    if order_discount:
+        total_price -= order_discount
+
     signature, data = payment_process(total_price, order_id)
 
     return templates.TemplateResponse(env.get_template('checkout.html'),
