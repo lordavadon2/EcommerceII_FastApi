@@ -7,9 +7,10 @@ from starlette.responses import RedirectResponse
 
 from src.app.cart.cart import Cart
 from src.app.orders.mail import Mail
-from src.app.payment.services import payment_process
+from src.app.shop.recommender import Recommender
 from src.utils.depencies import templates, env
 from src.app.orders import crud
+from src.app.shop import crud as shop_crud
 
 
 def get_order_add(request: Request, db: Session):
@@ -33,6 +34,8 @@ def save_order_add(request: Request,
                    bg_task: BackgroundTasks):
     cart = Cart(request, db)
 
+    recommender = Recommender()
+
     db_order = crud.create_order(db=db,
                                  first_name=first_name,
                                  last_name=last_name,
@@ -46,16 +49,21 @@ def save_order_add(request: Request,
 
     request.session['order_id'] = order_id
 
+    recommending = []
     for item in cart:
         product_id = item['product']['id']
         crud.create_order_item(db=db,
                                order_id=order_id,
                                product_id=product_id,
                                item=item)
+        recommending.append(shop_crud.get_product_by_product_id(db, product_id))
+
     cart.remove_all()
 
     mail = Mail()
     bg_task.add_task(mail.send_notification)
+
+    recommender.products_bought(recommending)
 
     crud.update_order(db=db, order_id=order_id)
 

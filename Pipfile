@@ -17,6 +17,7 @@ starlette-context = "*"
 stripe = "*"
 python-dotenv = '*'
 order = "*"
+redis = "*"
 
 [dev-packages]
 
